@@ -8,7 +8,6 @@
   },
   "author": "",
   "license": "ISC",
-  "browser": "index.css",
   "files": [
     "*.{css,woff2}"
   ]
