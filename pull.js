@@ -4,6 +4,7 @@ let fs = require('fs');
 function pull_font(family)
 {
     let basename = family.replace(/\+/g, '-').toLowerCase();
+    let displayName = family.replace(/\+/g, ' ');
     let stylename = basename.replace('material-symbols-', '');
     for (let weight = 100; weight <= 700; weight += 100)
     {
@@ -39,9 +40,29 @@ function pull_font(family)
         });
 
         // Save patched css
-        css = css.replace(/url\((.*?)\)/, `url(${font_file})`);
+        let css2 = 
+`@font-face {
+    font-family: '${displayName}';
+    font-style: normal;
+    font-weight: ${weight};
+    src: url('${font_file}') format('woff2');
+}
 
-        fs.writeFileSync(`${stylename}-${weight}.css`, css);
+.material-symbols-outlined {
+    font-family: '${displayName}';
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    transform: translate(0, .15em);
+}
+
+`
+        fs.writeFileSync(`${stylename}-${weight}.css`, css2);
     }
 }
 
